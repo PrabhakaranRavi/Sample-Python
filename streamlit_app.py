@@ -210,7 +210,7 @@ def perform_hourly_prediction(ticker, start_date, end_date):
 
     # Identify matches within 5% for actual open value
     def is_within_5_percent(actual, predicted):
-        return abs((actual - predicted) / actual) <= 0.05
+        return abs((actual - predicted) / actual) <= 0.02
 
     matches = []
     for i in range(6, len(jsonDataHourFrame["candlestick"])):
