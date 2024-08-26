@@ -1,0 +1,6 @@
+streamlit
+yfinance
+tradingview_ta
+streamlit-lightweight-charts
+pandas
+numpy
