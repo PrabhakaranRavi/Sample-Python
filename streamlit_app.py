@@ -6,7 +6,7 @@ import datetime
 import json
 
 # Set the refresh interval in seconds (e.g., 60 seconds)
-refresh_interval = 60
+refresh_interval = 5
 
 # Embed the JavaScript in Streamlit for auto-refresh
 st.markdown(f"""
