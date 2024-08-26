@@ -5,6 +5,21 @@ from datetime import datetime, timedelta
 import datetime
 import json
 
+# Set the refresh interval in seconds (e.g., 60 seconds)
+refresh_interval = 60
+
+# Embed the JavaScript in Streamlit for auto-refresh
+st.markdown(f"""
+    <script>
+        function refreshPage() {{
+            setTimeout(function() {{
+                window.location.reload(1);
+            }}, {refresh_interval * 1000});
+        }}
+        refreshPage();
+    </script>
+    """, unsafe_allow_html=True)
+
 # Function to perform the calculation and generate the JSON data
 def perform_hourly_prediction(ticker, start_date, end_date):
     data = yf.download(ticker, start=start_date, interval="60m")
