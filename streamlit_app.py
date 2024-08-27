@@ -356,8 +356,8 @@ if stock_ticker and start_date and end_date:
     with col8:
         show_close2 = st.checkbox("Close 2")
 
-        # Horizontal alignment of checkboxes for Predicted Values - 3
-    col9, col10, col11, col12, col13 = st.columns(4)
+    # Horizontal alignment of checkboxes for Predicted Values - 3
+    col9, col10, col11, col12, col13 = st.columns(5)
     with col9:
         show_open3 = st.checkbox("Open 3")
     with col10:
