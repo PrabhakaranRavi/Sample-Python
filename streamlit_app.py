@@ -509,3 +509,59 @@ if stock_ticker and start_date and end_date:
         ],
         "candlestick_combined",
     )
+
+    # Additional chart for matches
+    if show_matches:
+        # Prepare the new chart options for the match highlights
+        match_chart_options = {
+            "width": 600,
+            "height": 400,
+            "layout": {
+                "background": {"type": "solid", "color": "white"},
+                "textColor": "black",
+            },
+            "grid": {
+                "vertLines": {"color": "rgba(197, 203, 206, 0.5)"},
+                "horzLines": {"color": "rgba(197, 203, 206, 0.5)"},
+            },
+            "crosshair": {"mode": 0},
+            "priceScale": {"borderColor": "rgba(197, 203, 206, 0.8)"},
+            "timeScale": {
+                "borderColor": "rgba(197, 203, 206, 0.8)",
+                "barSpacing": 10,
+                "minBarSpacing": 8,
+                "timeVisible": True,
+                "secondsVisible": False,
+            },
+        }
+
+        # Prepare the series for the matches
+        match_series = [
+            {
+                "type": "Candlestick",
+                "data": json_dataHour["candlestick"],
+                "options": {
+                    "upColor": "#26a69a",
+                    "downColor": "#ef5350",
+                    "borderVisible": False,
+                    "wickUpColor": "#26a69a",
+                    "wickDownColor": "#ef5350",
+                },
+            },
+            {
+                "type": "Line",
+                "data": json_dataHour["matches"],
+                "options": {"color": "black", "title": "Matches Open", "lineWidth": 2, "dotSize": 5},
+            }
+        ]
+
+        # Render the chart with matches highlighted
+        renderLightweightCharts(
+            [
+                {
+                    "series": match_series,
+                    "chart": match_chart_options,
+                }
+            ],
+            "matches_highlighted_chart",
+        )
