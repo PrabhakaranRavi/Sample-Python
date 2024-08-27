@@ -290,24 +290,20 @@ def perform_hourly_prediction(ticker, start_date, end_date):
     return jsonDataHourFrame
 
 
-# Streamlit UI
-st.title("Stock OHLC Prediction")
+# Sidebar inputs
+stock_ticker = st.sidebar.text_input("Enter Stock Ticker (e.g., MARUTI.NS)", "FSL.NS")
+start_date = st.sidebar.date_input("Start Date", datetime.strptime("2024-08-01", "%Y-%m-%d"))
+end_date = st.sidebar.date_input("End Date", datetime.today())
 
-# Input fields
-ticker = st.text_input("Enter stock ticker")
-start_date = st.date_input("Select start date")
-end_date = st.date_input("Select end date")
-
-if st.button("Run Prediction"):
+if st.sidebar.button("Run Prediction"):
     # Call the function to perform predictions and get results
     jsonDataHourFrame = perform_hourly_prediction(
-        ticker, start_date.strftime("%Y-%m-%d"), end_date.strftime("%Y-%m-%d")
+        stock_ticker, start_date, end_date
     )
 
     # Display the results
     st.json(jsonDataHourFrame)
     st.write("Matches within 5% for actual open value:")
-    # st.json(matches)
 
 # # Fetch and display the candlestick chart
 # if ticker and start_date and end_date:
