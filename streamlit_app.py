@@ -517,7 +517,7 @@ if stock_ticker and start_date and end_date:
         for match in json_dataHour["matches"]:
             match_highlight_data.append({
                 "time": match["time"],
-                "value": match["predicted_open"],
+                "value": match["value"],
                 "color": "black",
                 "size": 5
             })
