@@ -357,7 +357,7 @@ if stock_ticker and start_date and end_date:
         show_close2 = st.checkbox("Close 2")
 
         # Horizontal alignment of checkboxes for Predicted Values - 3
-    col9, col10, col11, col12 = st.columns(4)
+    col9, col10, col11, col12, col13 = st.columns(4)
     with col9:
         show_open3 = st.checkbox("Open 3")
     with col10:
@@ -366,7 +366,8 @@ if stock_ticker and start_date and end_date:
         show_low3 = st.checkbox("Low 3")
     with col12:
         show_close3 = st.checkbox("Close 3")
-
+    with col13:  # New column for Matches checkbox
+        show_matches = st.checkbox("Show Matches")
         # Prepare the candlestick series
     series_chartHour = [
         {
