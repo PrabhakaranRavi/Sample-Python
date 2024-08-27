@@ -10,7 +10,8 @@ from streamlit_lightweight_charts import renderLightweightCharts
 refresh_interval = 5
 
 # Embed the JavaScript in Streamlit for auto-refresh
-st.markdown(f"""
+st.markdown(
+    f"""
     <script>
         function refreshPage() {{
             setTimeout(function() {{
@@ -19,7 +20,10 @@ st.markdown(f"""
         }}
         refreshPage();
     </script>
-    """, unsafe_allow_html=True)
+    """,
+    unsafe_allow_html=True,
+)
+
 
 # Function to perform the calculation and generate the JSON data
 def perform_hourly_prediction(ticker, start_date, end_date):
@@ -136,25 +140,42 @@ def perform_hourly_prediction(ticker, start_date, end_date):
 
     # Handle prediction for the next hour
     last_data_date = data.index[-1].date()
-    end_date_obj = datetime.datetime.strptime(end_date, "%Y-%m-%d")
-    year = end_date_obj.year
-    month = end_date_obj.month
-    day = end_date_obj.day
-    date_time = datetime.datetime(year, month, day, 9, 15, 0, tzinfo=datetime.timezone.utc)
+
+    # Convert end_date to a datetime object
+    end_date_obj = datetime.combine(end_date, time(0, 0))
+
+    # Create the datetime object for 9:15 AM UTC on the end_date
+    date_time = datetime(
+        year=end_date_obj.year,
+        month=end_date_obj.month,
+        day=end_date_obj.day,
+        hour=9,
+        minute=15,
+        tzinfo=timezone.utc,
+    )
+
+    # Convert to Unix timestamp
     next_hour_unix = int(date_time.timestamp())
+
     if last_data_date == end_date_obj.date():
+        # Adjust next hour Unix time within trading hours if the last data date matches the end date
         last_hour = data.index[-1].hour
         next_hour = last_hour + 1
 
-        if next_hour >= 9 and next_hour < 15:
+        if next_hour >= 9 and next_hour < 15:  # within trading hours
             next_hour_unix = int(
-                datetime.datetime.combine(last_data_date, datetime.time(hour=next_hour, tzinfo=datetime.timezone.utc)).timestamp()
+                datetime.combine(
+                    last_data_date, time(hour=next_hour, tzinfo=timezone.utc)
+                ).timestamp()
             )
-        else:
+        else:  # wrap-around to the next trading day's first hour (9:15 AM)
             next_hour_unix = int(
-                datetime.datetime.combine(last_data_date + datetime.timedelta(days=1), datetime.time(9, 15, tzinfo=datetime.timezone.utc)).timestamp()
+                datetime.combine(
+                    last_data_date + timedelta(days=1), time(9, 15, tzinfo=timezone.utc)
+                ).timestamp()
             )
     else:
+        # Set the next hour prediction to end_date + 9:15 AM if the end date does not match the last data date
         next_hour_unix = int(date_time.timestamp())
 
     # After determining the next hour Unix value, use the last six hours to predict
@@ -271,34 +292,34 @@ if st.button("Run Prediction"):
 
 # Fetch and display the candlestick chart
 if ticker and start_date and end_date:
-    
+
     json_dataHour = perform_hourly_prediction(ticker, start_date, end_date)
     json_strHour = json.dumps(json_dataHour, indent=4)
     chart_optionsHour = {
-            "width": 600,  # Enlarged chart width
-            "height": 400,  # Enlarged chart height
-            "layout": {
-                "background": {"type": "solid", "color": "white"},
-                "textColor": "black",
-            },
-            "grid": {
-                "vertLines": {"color": "rgba(197, 203, 206, 0.5)"},
-                "horzLines": {"color": "rgba(197, 203, 206, 0.5)"},
-            },
-            "crosshair": {"mode": 0},
-            "priceScale": {"borderColor": "rgba(197, 203, 206, 0.8)"},
-            "timeScale": {
-                "borderColor": "rgba(197, 203, 206, 0.8)",
-                "barSpacing": 10,
-                "minBarSpacing": 8,
-                "timeVisible": True,
-                "secondsVisible": False,
-            },
-        }
-        
+        "width": 600,  # Enlarged chart width
+        "height": 400,  # Enlarged chart height
+        "layout": {
+            "background": {"type": "solid", "color": "white"},
+            "textColor": "black",
+        },
+        "grid": {
+            "vertLines": {"color": "rgba(197, 203, 206, 0.5)"},
+            "horzLines": {"color": "rgba(197, 203, 206, 0.5)"},
+        },
+        "crosshair": {"mode": 0},
+        "priceScale": {"borderColor": "rgba(197, 203, 206, 0.8)"},
+        "timeScale": {
+            "borderColor": "rgba(197, 203, 206, 0.8)",
+            "barSpacing": 10,
+            "minBarSpacing": 8,
+            "timeVisible": True,
+            "secondsVisible": False,
+        },
+    }
+
     # Subheader for the chart
     st.subheader("Predicted Values")
-     # Horizontal alignment of checkboxes for Predicted Values - 1
+    # Horizontal alignment of checkboxes for Predicted Values - 1
     col1, col2, col3, col4 = st.columns(4)
     with col1:
         show_open1 = st.checkbox("Open 1")
@@ -307,7 +328,7 @@ if ticker and start_date and end_date:
     with col3:
         show_low1 = st.checkbox("Low 1")
     with col4:
-        show_close1 = st.checkbox("Close 1")   
+        show_close1 = st.checkbox("Close 1")
 
         # Horizontal alignment of checkboxes for Predicted Values - 2
     col5, col6, col7, col8 = st.columns(4)
@@ -318,7 +339,7 @@ if ticker and start_date and end_date:
     with col7:
         show_low2 = st.checkbox("Low 2")
     with col8:
-        show_close2 = st.checkbox("Close 2")        
+        show_close2 = st.checkbox("Close 2")
 
         # Horizontal alignment of checkboxes for Predicted Values - 3
     col9, col10, col11, col12 = st.columns(4)
@@ -330,116 +351,138 @@ if ticker and start_date and end_date:
         show_low3 = st.checkbox("Low 3")
     with col12:
         show_close3 = st.checkbox("Close 3")
-    
 
-   
         # Prepare the candlestick series
     series_chartHour = [
-            {
-                "type": "Candlestick",
-                "data": json_dataHour["candlestick"],
-                "options": {
-                    "upColor": "#26a69a",
-                    "downColor": "#ef5350",
-                    "borderVisible": False,
-                    "wickUpColor": "#26a69a",
-                    "wickDownColor": "#ef5350",
-                },
-            }
+        {
+            "type": "Candlestick",
+            "data": json_dataHour["candlestick"],
+            "options": {
+                "upColor": "#26a69a",
+                "downColor": "#ef5350",
+                "borderVisible": False,
+                "wickUpColor": "#26a69a",
+                "wickDownColor": "#ef5350",
+            },
+        }
     ]
 
-        # Add the selected predicted values to the chart
+    # Add the selected predicted values to the chart
     if show_open1:
-        series_chartHour.append({
+        series_chartHour.append(
+            {
                 "type": "Line",
                 "data": json_dataHour["predicted_open1"],
                 "options": {"color": "blue", "title": "Predicted Open 1"},
-        })
+            }
+        )
 
     if show_high1:
-        series_chartHour.append({
+        series_chartHour.append(
+            {
                 "type": "Line",
                 "data": json_dataHour["predicted_high1"],
                 "options": {"color": "purple", "title": "Predicted High 1"},
-        })
+            }
+        )
 
     if show_low1:
-        series_chartHour.append({
+        series_chartHour.append(
+            {
                 "type": "Line",
                 "data": json_dataHour["predicted_low1"],
                 "options": {"color": "cyan", "title": "Predicted Low 1"},
-        })
+            }
+        )
 
     if show_close1:
-        series_chartHour.append({
+        series_chartHour.append(
+            {
                 "type": "Line",
                 "data": json_dataHour["predicted_close1"],
                 "options": {"color": "teal", "title": "Predicted Close 1"},
-        })
+            }
+        )
 
     if show_open2:
-        series_chartHour.append({
+        series_chartHour.append(
+            {
                 "type": "Line",
                 "data": json_dataHour["predicted_open2"],
                 "options": {"color": "green", "title": "Predicted Open 2"},
-        })
+            }
+        )
 
     if show_high2:
-        series_chartHour.append({
+        series_chartHour.append(
+            {
                 "type": "Line",
                 "data": json_dataHour["predicted_high2"],
                 "options": {"color": "orange", "title": "Predicted High 2"},
-        })
+            }
+        )
 
     if show_low2:
-        series_chartHour.append({
+        series_chartHour.append(
+            {
                 "type": "Line",
                 "data": json_dataHour["predicted_low2"],
                 "options": {"color": "yellow", "title": "Predicted Low 2"},
-        })
+            }
+        )
 
     if show_close2:
-        series_chartHour.append({
+        series_chartHour.append(
+            {
                 "type": "Line",
                 "data": json_dataHour["predicted_close2"],
                 "options": {"color": "pink", "title": "Predicted Close 2"},
-        })
+            }
+        )
 
     if show_open3:
-        series_chartHour.append({
+        series_chartHour.append(
+            {
                 "type": "Line",
                 "data": json_dataHour["predicted_open3"],
                 "options": {"color": "red", "title": "Predicted Open 3"},
-        })
+            }
+        )
 
     if show_high3:
-        series_chartHour.append({
+        series_chartHour.append(
+            {
                 "type": "Line",
                 "data": json_dataHour["predicted_high3"],
                 "options": {"color": "magenta", "title": "Predicted High 3"},
-        })
+            }
+        )
 
     if show_low3:
-        series_chartHour.append({
+        series_chartHour.append(
+            {
                 "type": "Line",
                 "data": json_dataHour["predicted_low3"],
                 "options": {"color": "brown", "title": "Predicted Low 3"},
-        })
+            }
+        )
 
     if show_close3:
-        series_chartHour.append({
+        series_chartHour.append(
+            {
                 "type": "Line",
                 "data": json_dataHour["predicted_close3"],
                 "options": {"color": "gray", "title": "Predicted Close 3"},
-        })
+            }
+        )
 
         # Render the combined chart
     renderLightweightCharts(
         [
             {
-                    "series": series_chartHour,
-                    "chart": chart_optionsHour,
+                "series": series_chartHour,
+                "chart": chart_optionsHour,
             }
         ],
-            "candlestick_combined",
-        )
+        "candlestick_combined",
+    )
