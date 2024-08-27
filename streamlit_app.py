@@ -367,7 +367,7 @@ if stock_ticker and start_date and end_date:
     with col12:
         show_close3 = st.checkbox("Close 3")
     with col13:  # New column for Matches checkbox
-        show_matches = st.checkbox("Show Matches")
+        show_matches = st.checkbox("Matches")
         # Prepare the candlestick series
     series_chartHour = [
         {
@@ -491,7 +491,14 @@ if stock_ticker and start_date and end_date:
                 "options": {"color": "gray", "title": "Predicted Close 3"},
             }
         )
-
+    if show_matches:
+        series_chartHour.append(
+            {
+                "type": "Line",
+                "data": json_dataHour["matches"],
+                "options": {"color": "gray", "title": "Matches Open"},
+            }
+        )
         # Render the combined chart
     renderLightweightCharts(
         [
