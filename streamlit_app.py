@@ -512,6 +512,16 @@ if stock_ticker and start_date and end_date:
 
     # Additional chart for matches
     if show_matches:
+        # Prepare match data for highlighting
+        match_highlight_data = []
+        for match in json_dataHour["matches"]:
+            match_highlight_data.append({
+                "time": match["time"],
+                "value": match["predicted_open"],
+                "color": "black",
+                "size": 5
+            })
+
         # Prepare the new chart options for the match highlights
         match_chart_options = {
             "width": 600,
@@ -549,9 +559,9 @@ if stock_ticker and start_date and end_date:
                 },
             },
             {
-                "type": "Line",
-                "data": json_dataHour["matches"],
-                "options": {"color": "black", "title": "Matches Open", "lineWidth": 2, "dotSize": 5},
+                "type": "Scatter",
+                "data": match_highlight_data,
+                "options": {"color": "black", "title": "Matches Open", "lineWidth": 0, "dotSize": 5},
             }
         ]
 
