@@ -273,17 +273,17 @@ def perform_hourly_prediction(ticker, start_date, end_date):
 
         # Check against predicted values for the current hour
         if len(jsonDataHourFrame["predicted_open1"]) > i:
-            if abs(actual_open - jsonDataHourFrame["predicted_open1"][i]["value"]) / actual_open <= 0.05:
+            if abs(actual_open - jsonDataHourFrame["predicted_open1"][i]["value"]) / actual_open <= 0.01:
                 jsonDataHourFrame["matches"].append(
                     {"time": time_unix, "value": jsonDataHourFrame["predicted_open1"][i]["value"]}
                 )
 
-            if abs(actual_open - jsonDataHourFrame["predicted_open2"][i]["value"]) / actual_open <= 0.05:
+            if abs(actual_open - jsonDataHourFrame["predicted_open2"][i]["value"]) / actual_open <= 0.01:
                 jsonDataHourFrame["matches"].append(
                     {"time": time_unix, "value": jsonDataHourFrame["predicted_open2"][i]["value"]}
                 )
 
-            if abs(actual_open - jsonDataHourFrame["predicted_open3"][i]["value"]) / actual_open <= 0.05:
+            if abs(actual_open - jsonDataHourFrame["predicted_open3"][i]["value"]) / actual_open <= 0.01:
                 jsonDataHourFrame["matches"].append(
                     {"time": time_unix, "value": jsonDataHourFrame["predicted_open3"][i]["value"]}
                 )
