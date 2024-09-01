@@ -83,9 +83,9 @@ def perform_hourly_prediction(ticker, start_date, end_date):
         diff_oh_lc = (sum_open + sum_high) - (sum_low + sum_close)
 
         # Calculate predicted values
-        predicted_open1 = (sum_open / 6) + (diff_oh_lc / 3)
-        predicted_open2 = (sum_open / 6) + (diff_oh_lc / 6)
-        predicted_open3 = (sum_open / 6) + (diff_oh_lc / 9)
+        predicted_open1 = (sum_open / 6) + (diff_oh_lc / 30)
+        predicted_open2 = (sum_open / 6) + (diff_oh_lc / 60)
+        predicted_open3 = (sum_open / 6) + (diff_oh_lc / 90)
 
         predicted_high1 = (sum_high / 6) + (diff_oh_lc / 3)
         predicted_high2 = (sum_high / 6) + (diff_oh_lc / 6)
