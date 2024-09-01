@@ -697,14 +697,14 @@ def perform_calculation(ticker, start_date, end_date):
     daily_sums["TR2"] = daily_sums["LowDiv"] - (daily_sums["DiffOH-LC"] / 6)
     daily_sums["TR3"] = daily_sums["LowDiv"] - (daily_sums["DiffOH-LC"] / 9)
 
-     # Inject JavaScript to log to Chrome console
+    # Inject JavaScript to log to Chrome console
     st.components.v1.html(
-            f"""
+        f"""
         <script>
         console.log("{daily_sums}");
         </script>
         """,
-            height=0,
+        height=0,
     )
     # Merge daily sums with daily data
     daily_data = yf.download(ticker, start=start_date, interval="1d")
