@@ -871,7 +871,7 @@ def perform_calculation(ticker, start_date, end_date):
                 ),
             }
         )
-        
+
     for row in daily_data.itertuples():
         time_unix = int(datetime.combine(row.Index, datetime.min.time()).timestamp())
         json_data["candlestick"].append(
@@ -1164,9 +1164,18 @@ if stock_ticker and start_date and end_date:
     json_data = perform_calculation(stock_ticker, start_date, end_date)
     json_dataHour = perform_hourly_prediction(stock_ticker, start_date, end_date)
     
-    # Convert JSON data to string
-    json_str = json.dumps(json_data, indent=4)
-    json_strHour = json.dumps(json_data, indent=4)
+     # Inject JavaScript to log to Chrome console
+    st.components.v1.html(
+        f"""
+        <script>
+        console.log("{json_data}");
+        </script>
+        """,
+        height=0,
+    )
+    # # Convert JSON data to string
+    # json_str = json.dumps(json_data, indent=4)
+    # json_strHour = json.dumps(json_data, indent=4)
 
     # Format data for each period
     last_6_days_data = format_ohlc_values(json_data, "Last6Days")
