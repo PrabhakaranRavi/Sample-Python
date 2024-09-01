@@ -609,6 +609,15 @@ end_12w = datetime.strptime("2024-08-31", "%Y-%m-%d")
 start_6m = datetime.strptime("2024-03-01", "%Y-%m-%d")
 end_6m = datetime.strptime("2024-08-31", "%Y-%m-%d")
 
+# Checkbox to toggle full view
+full_view = st.checkbox("Full View", value=False)
+# Adjust chart size based on the full view option
+if full_view:
+    chart_width = 1200  # Full view chart width
+    chart_height = 800  # Full view chart height
+else:
+    chart_width = 600   # Default chart width
+    chart_height = 400  # Default chart height
 
 # Function to remove entries with null values
 def remove_null_values(data):
@@ -1180,8 +1189,8 @@ if stock_ticker and start_date and end_date:
     if json_data and json_data["candlestick"]:
         # Prepare the chart options
         chart_options = {
-            "width": 600,  # Enlarged chart width
-            "height": 400,  # Enlarged chart height
+            "width": chart_width,  # Dynamic chart width
+            "height": chart_height,  # Dynamic chart height
             "layout": {
                 "background": {"type": "solid", "color": "white"},
                 "textColor": "black",
