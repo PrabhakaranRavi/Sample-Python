@@ -817,69 +817,6 @@ def perform_calculation(ticker, start_date, end_date):
         "Revenue_Per_Share": revenue_per_share,
     }
 
-    # Check if the end_date is the same as the last date in daily_data
-    last_date_in_daily_data = daily_data.index[-1]
-    if end_date != last_date_in_daily_data.strftime("%Y-%m-%d"):
-        # Take the last row of TS and TR values from daily_sums
-        last_row = daily_sums.iloc[-1]
-        # Convert end_date to the correct string format
-        formatted_end_date = end_date.strftime("%Y-%m-%d")
-
-        # Ensure end_date is a datetime.date object
-        if isinstance(end_date, str):
-            end_date = datetime.strptime(end_date, "%Y-%m-%d").date()
-
-        # Convert end_date to Unix timestamp
-        end_date_unix = int(datetime.combine(end_date, datetime.min.time()).timestamp())
-
-        # Append these values to json_data, converting np.float64 to standard float
-        json_data["ts1"].append(
-            {
-                "time": formatted_end_date,
-                "value": float(last_row.TS1) if not np.isnan(last_row.TS1) else None,
-            }
-        )
-        json_data["ts2"].append(
-            {
-                "time": formatted_end_date,
-                "value": float(last_row.TS2) if not np.isnan(last_row.TS2) else None,
-            }
-        )
-        json_data["ts3"].append(
-            {
-                "time": formatted_end_date,
-                "value": float(last_row.TS3) if not np.isnan(last_row.TS3) else None,
-            }
-        )
-        json_data["tr1"].append(
-            {
-                "time": formatted_end_date,
-                "value": float(last_row.TR1) if not np.isnan(last_row.TR1) else None,
-            }
-        )
-        json_data["tr2"].append(
-            {
-                "time": formatted_end_date,
-                "value": float(last_row.TR2) if not np.isnan(last_row.TR2) else None,
-            }
-        )
-        json_data["tr3"].append(
-            {
-                "time": formatted_end_date,
-                "value": float(last_row.TR3) if not np.isnan(last_row.TR3) else None,
-            }
-        )
-        # Add OHLC data for end_date with 0 as default values
-        json_data["candlestick"].append(
-            {
-                "time": end_date_unix,
-                "open": 0,
-                "high": 0,
-                "low": 0,
-                "close": 0,
-            }
-        )
-
     for row in daily_data.itertuples():
         time_unix = int(datetime.combine(row.Index, datetime.min.time()).timestamp())
         json_data["candlestick"].append(
@@ -952,6 +889,69 @@ def perform_calculation(ticker, start_date, end_date):
             }
         )
 
+    # Check if the end_date is the same as the last date in daily_data
+    last_date_in_daily_data = daily_data.index[-1]
+    if end_date != last_date_in_daily_data.strftime("%Y-%m-%d"):
+        # Take the last row of TS and TR values from daily_sums
+        last_row = daily_sums.iloc[-1]
+        # Convert end_date to the correct string format
+        formatted_end_date = end_date.strftime("%Y-%m-%d")
+
+        # Ensure end_date is a datetime.date object
+        if isinstance(end_date, str):
+            end_date = datetime.strptime(end_date, "%Y-%m-%d").date()
+
+        # Convert end_date to Unix timestamp
+        end_date_unix = int(datetime.combine(end_date, datetime.min.time()).timestamp())
+
+        # Append these values to json_data, converting np.float64 to standard float
+        json_data["ts1"].append(
+            {
+                "time": formatted_end_date,
+                "value": float(last_row.TS1) if not np.isnan(last_row.TS1) else None,
+            }
+        )
+        json_data["ts2"].append(
+            {
+                "time": formatted_end_date,
+                "value": float(last_row.TS2) if not np.isnan(last_row.TS2) else None,
+            }
+        )
+        json_data["ts3"].append(
+            {
+                "time": formatted_end_date,
+                "value": float(last_row.TS3) if not np.isnan(last_row.TS3) else None,
+            }
+        )
+        json_data["tr1"].append(
+            {
+                "time": formatted_end_date,
+                "value": float(last_row.TR1) if not np.isnan(last_row.TR1) else None,
+            }
+        )
+        json_data["tr2"].append(
+            {
+                "time": formatted_end_date,
+                "value": float(last_row.TR2) if not np.isnan(last_row.TR2) else None,
+            }
+        )
+        json_data["tr3"].append(
+            {
+                "time": formatted_end_date,
+                "value": float(last_row.TR3) if not np.isnan(last_row.TR3) else None,
+            }
+        )
+        # Add OHLC data for end_date with 0 as default values
+        json_data["candlestick"].append(
+            {
+                "time": end_date_unix,
+                "open": 0,
+                "high": 0,
+                "low": 0,
+                "close": 0,
+            }
+        )
+        
     return json_data
 
 
