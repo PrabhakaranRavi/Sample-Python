@@ -941,17 +941,17 @@ def perform_calculation(ticker, start_date, end_date):
                 "value": float(last_row.TR3) if not np.isnan(last_row.TR3) else None,
             }
         )
-        # Add OHLC data for end_date with 0 as default values
-        json_data["candlestick"].append(
-            {
-                "time": end_date_unix,
-                "open": 0,
-                "high": 0,
-                "low": 0,
-                "close": 0,
-            }
-        )
-        
+        # # Add OHLC data for end_date with 0 as default values
+        # json_data["candlestick"].append(
+        #     {
+        #         "time": end_date_unix,
+        #         "open": ,
+        #         "high": 0,
+        #         "low": 0,
+        #         "close": 0,
+        #     }
+        # )
+
     return json_data
 
 
