@@ -825,41 +825,41 @@ def perform_calculation(ticker, start_date, end_date):
         # Convert end_date to the correct string format
         formatted_end_date = end_date.strftime("%Y-%m-%d")
 
-        # Append these values to json_data, using the formatted end_date as the time
+      # Append these values to json_data, converting np.float64 to standard float
         json_data["ts1"].append(
             {
-                "time": formatted_end_date,  # Use the formatted end_date as the time
-                "value": last_row.TS1 if not np.isnan(last_row.TS1) else None,
+                "time": formatted_end_date,
+                "value": float(last_row.TS1) if not np.isnan(last_row.TS1) else None,
             }
         )
         json_data["ts2"].append(
             {
                 "time": formatted_end_date,
-                "value": last_row.TS2 if not np.isnan(last_row.TS2) else None,
+                "value": float(last_row.TS2) if not np.isnan(last_row.TS2) else None,
             }
         )
         json_data["ts3"].append(
             {
                 "time": formatted_end_date,
-                "value": last_row.TS3 if not np.isnan(last_row.TS3) else None,
+                "value": float(last_row.TS3) if not np.isnan(last_row.TS3) else None,
             }
         )
         json_data["tr1"].append(
             {
                 "time": formatted_end_date,
-                "value": last_row.TR1 if not np.isnan(last_row.TR1) else None,
+                "value": float(last_row.TR1) if not np.isnan(last_row.TR1) else None,
             }
         )
         json_data["tr2"].append(
             {
                 "time": formatted_end_date,
-                "value": last_row.TR2 if not np.isnan(last_row.TR2) else None,
+                "value": float(last_row.TR2) if not np.isnan(last_row.TR2) else None,
             }
         )
         json_data["tr3"].append(
             {
                 "time": formatted_end_date,
-                "value": last_row.TR3 if not np.isnan(last_row.TR3) else None,
+                "value": float(last_row.TR3) if not np.isnan(last_row.TR3) else None,
             }
         )
 
