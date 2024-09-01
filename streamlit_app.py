@@ -825,7 +825,14 @@ def perform_calculation(ticker, start_date, end_date):
         # Convert end_date to the correct string format
         formatted_end_date = end_date.strftime("%Y-%m-%d")
 
-      # Append these values to json_data, converting np.float64 to standard float
+        # Ensure end_date is a datetime.date object
+        if isinstance(end_date, str):
+            end_date = datetime.strptime(end_date, "%Y-%m-%d").date()
+
+        # Convert end_date to Unix timestamp
+        end_date_unix = int(datetime.combine(end_date, datetime.min.time()).timestamp())
+
+        # Append these values to json_data, converting np.float64 to standard float
         json_data["ts1"].append(
             {
                 "time": formatted_end_date,
@@ -860,6 +867,16 @@ def perform_calculation(ticker, start_date, end_date):
             {
                 "time": formatted_end_date,
                 "value": float(last_row.TR3) if not np.isnan(last_row.TR3) else None,
+            }
+        )
+        # Add OHLC data for end_date with 0 as default values
+        json_data["candlestick"].append(
+            {
+                "time": end_date_unix,
+                "open": 0,
+                "high": 0,
+                "low": 0,
+                "close": 0,
             }
         )
 
