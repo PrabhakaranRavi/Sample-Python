@@ -611,6 +611,8 @@ end_6m = datetime.strptime("2024-08-31", "%Y-%m-%d")
 
 # Auto-refresh every 10 seconds
 refresh_interval = 10  # seconds
+# Delay before refreshing the page
+time.sleep(refresh_interval)
 st.experimental_rerun()
 
 # Checkbox to toggle full view
