@@ -599,7 +599,7 @@ custom_end = st.sidebar.date_input(
 )
 
 start_30d = st.sidebar.date_input(
-    "30D Start", datetime.strptime("2024-07-18", "%Y-%m-%d")
+    "30D Start", datetime.strptime("2024-07-19", "%Y-%m-%d")
 )
 end_30d = st.sidebar.date_input("30D End", datetime.strptime("2024-08-31", "%Y-%m-%d"))
 
