@@ -592,26 +592,26 @@ start_date = st.sidebar.date_input("Start Date", datetime.strptime("2024-08-01",
 end_date = st.sidebar.date_input("End Date", datetime.today())
 
 custom_start = st.sidebar.date_input(
-    "Custom Start", datetime.strptime("2024-08-19", "%Y-%m-%d")
+    "Custom Start", datetime.strptime("2024-08-23", "%Y-%m-%d")
 )
 custom_end = st.sidebar.date_input(
-    "Custom End", datetime.strptime("2024-08-27", "%Y-%m-%d")
+    "Custom End", datetime.strptime("2024-08-31", "%Y-%m-%d")
 )
 
 start_30d = st.sidebar.date_input(
-    "30D Start", datetime.strptime("2024-07-12", "%Y-%m-%d")
+    "30D Start", datetime.strptime("2024-07-18", "%Y-%m-%d")
 )
-end_30d = st.sidebar.date_input("30D End", datetime.strptime("2024-08-27", "%Y-%m-%d"))
+end_30d = st.sidebar.date_input("30D End", datetime.strptime("2024-08-31", "%Y-%m-%d"))
 
 start_12w = st.sidebar.date_input(
-    "12W Start", datetime.strptime("2024-06-03", "%Y-%m-%d")
+    "12W Start", datetime.strptime("2024-06-10", "%Y-%m-%d")
 )
-end_12w = st.sidebar.date_input("12W End", datetime.strptime("2024-08-24", "%Y-%m-%d"))
+end_12w = st.sidebar.date_input("12W End", datetime.strptime("2024-08-31", "%Y-%m-%d"))
 
 start_6m = st.sidebar.date_input(
-    "6M Start", datetime.strptime("2024-02-01", "%Y-%m-%d")
+    "6M Start", datetime.strptime("2024-03-01", "%Y-%m-%d")
 )
-end_6m = st.sidebar.date_input("6M End", datetime.strptime("2024-07-31", "%Y-%m-%d"))
+end_6m = st.sidebar.date_input("6M End", datetime.strptime("2024-08-31", "%Y-%m-%d"))
 
 
 # Function to remove entries with null values
@@ -697,6 +697,15 @@ def perform_calculation(ticker, start_date, end_date):
     daily_sums["TR2"] = daily_sums["LowDiv"] - (daily_sums["DiffOH-LC"] / 6)
     daily_sums["TR3"] = daily_sums["LowDiv"] - (daily_sums["DiffOH-LC"] / 9)
 
+     # Inject JavaScript to log to Chrome console
+    st.components.v1.html(
+            f"""
+        <script>
+        console.log("{daily_sums}");
+        </script>
+        """,
+            height=0,
+    )
     # Merge daily sums with daily data
     daily_data = yf.download(ticker, start=start_date, interval="1d")
     daily_data = daily_data.drop(columns=["Adj Close", "Volume"])
