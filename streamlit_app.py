@@ -584,34 +584,30 @@ from datetime import datetime, timezone, time, timedelta
 from streamlit_lightweight_charts import renderLightweightCharts
 import json
 
-# Sidebar inputs
-stock_ticker = st.sidebar.text_input(
+# Centered Stock Ticker Input
+stock_ticker = st.text_input(
     "Enter Stock Ticker (e.g., MARUTI.NS)", "FSL.NS"
 )
-start_date = st.sidebar.date_input("Start Date", datetime.strptime("2024-08-01", "%Y-%m-%d"))
-end_date = st.sidebar.date_input("End Date", datetime.today())
 
-custom_start = st.sidebar.date_input(
-    "Custom Start", datetime.strptime("2024-08-23", "%Y-%m-%d")
-)
-custom_end = st.sidebar.date_input(
-    "Custom End", datetime.strptime("2024-08-31", "%Y-%m-%d")
-)
+# Centered Start and End Date Inputs
+col1, col2 = st.columns(2)
+with col1:
+    start_date = st.date_input("Start Date", datetime.strptime("2024-08-01", "%Y-%m-%d"))
+with col2:
+    end_date = st.date_input("End Date", datetime.today())
 
-start_30d = st.sidebar.date_input(
-    "30D Start", datetime.strptime("2024-07-19", "%Y-%m-%d")
-)
-end_30d = st.sidebar.date_input("30D End", datetime.strptime("2024-08-31", "%Y-%m-%d"))
+# Variables for Custom Date Ranges (not in sidebar)
+custom_start = datetime.strptime("2024-08-23", "%Y-%m-%d")
+custom_end = datetime.strptime("2024-08-31", "%Y-%m-%d")
 
-start_12w = st.sidebar.date_input(
-    "12W Start", datetime.strptime("2024-06-10", "%Y-%m-%d")
-)
-end_12w = st.sidebar.date_input("12W End", datetime.strptime("2024-08-31", "%Y-%m-%d"))
+start_30d = datetime.strptime("2024-07-19", "%Y-%m-%d")
+end_30d = datetime.strptime("2024-08-31", "%Y-%m-%d")
 
-start_6m = st.sidebar.date_input(
-    "6M Start", datetime.strptime("2024-03-01", "%Y-%m-%d")
-)
-end_6m = st.sidebar.date_input("6M End", datetime.strptime("2024-08-31", "%Y-%m-%d"))
+start_12w = datetime.strptime("2024-06-10", "%Y-%m-%d")
+end_12w = datetime.strptime("2024-08-31", "%Y-%m-%d")
+
+start_6m = datetime.strptime("2024-03-01", "%Y-%m-%d")
+end_6m = datetime.strptime("2024-08-31", "%Y-%m-%d")
 
 
 # Function to remove entries with null values
@@ -896,14 +892,6 @@ def perform_calculation(ticker, start_date, end_date):
         last_row = daily_sums.iloc[-1]
         # Convert end_date to the correct string format
         formatted_end_date = end_date.strftime("%Y-%m-%d")
-
-        # Ensure end_date is a datetime.date object
-        if isinstance(end_date, str):
-            end_date = datetime.strptime(end_date, "%Y-%m-%d").date()
-
-        # Convert end_date to Unix timestamp
-        end_date_unix = int(datetime.combine(end_date, datetime.min.time()).timestamp())
-
         # Append these values to json_data, converting np.float64 to standard float
         json_data["ts1"].append(
             {
